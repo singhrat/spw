@@ -13,10 +13,10 @@ import javax.swing.Timer;
 
 public class GameEngine implements KeyListener, GameReporter{
 	GamePanel gp;
+	
 		
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();	
 	private SpaceShip v;	
-	
 	private Timer timer;
 	
 	private long score = 0;
@@ -27,9 +27,7 @@ public class GameEngine implements KeyListener, GameReporter{
 		this.v = v;		
 		
 		gp.sprites.add(v);
-		
-		timer = new Timer(500, new ActionListener() {
-			
+			timer = new Timer(100, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				process();
@@ -50,6 +48,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	}
 	
 	private void process(){
+		
 		if(Math.random() < difficulty){
 			generateEnemy();
 		}
@@ -58,14 +57,12 @@ public class GameEngine implements KeyListener, GameReporter{
 		while(e_iter.hasNext()){
 			Enemy e = e_iter.next();
 			e.proceed();
-			
 			if(!e.isAlive()){
 				e_iter.remove();
 				gp.sprites.remove(e);
 				score += 100;
 			}
-		}
-		
+		}	
 		gp.updateGameUI(this);
 		
 		Rectangle2D.Double vr = v.getRectangle();
@@ -73,8 +70,9 @@ public class GameEngine implements KeyListener, GameReporter{
 		for(Enemy e : enemies){
 			er = e.getRectangle();
 			if(er.intersects(vr)){
-				die();
-				return;
+				if(!v.isalive()){
+						die();
+				}
 			}
 		}
 	}

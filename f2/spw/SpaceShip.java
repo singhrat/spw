@@ -6,7 +6,8 @@ import java.awt.Graphics2D;
 public class SpaceShip extends Sprite{
 
 	int step = 8;
-	
+	boolean live =true;
+	int i=6;
 	public SpaceShip(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		
@@ -32,5 +33,13 @@ public class SpaceShip extends Sprite{
 			y = 0;
 		if(y > 600)
 			y = 600;
+	}
+	public boolean isalive(){
+		i--;
+		if(i==0)
+			return false;
+		else
+			return true;
+		
 	}
 }
