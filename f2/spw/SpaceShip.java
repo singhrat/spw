@@ -2,21 +2,31 @@ package f2.spw;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 public class SpaceShip extends Sprite{
 
 	int step = 8;
+	private Image b1;
+	private String img = "D:\\icon1.gif" ;
 	boolean live =true;
-	int i=6;
+	int i=15;
+	
 	public SpaceShip(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
-		g.setColor(Color.GREEN);
-		g.fillRect(x, y, width, height);
+		try{
+			b1 = ImageIO.read(new File(img));
+		} catch(IOException e){
+			e.printStackTrace();
+		}
+		g.drawImage(b1, x, y, width, height, null);
 		
 	}
 
