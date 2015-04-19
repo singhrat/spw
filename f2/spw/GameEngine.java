@@ -14,13 +14,13 @@ import javax.swing.Timer;
 public class GameEngine implements KeyListener, GameReporter{
 	GamePanel gp;
 	
-		
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();	
 	private SpaceShip v;	
 	private Timer timer;
 	
 	private long score = 0;
 	private long scoremax = 0;
+	private int hp = 3;
 	private double difficulty = 0.1;
 	
 	public GameEngine(GamePanel gp, SpaceShip v) {
@@ -35,6 +35,7 @@ public class GameEngine implements KeyListener, GameReporter{
 			}
 		});
 		timer.setRepeats(true);
+		
 	}
 	
 	
@@ -72,10 +73,16 @@ public class GameEngine implements KeyListener, GameReporter{
 		Rectangle2D.Double er;
 		for(Enemy e : enemies){
 			er = e.getRectangle();
+			
 			if(er.intersects(vr)){
+				e.aliveEnemy();
 				score=0;
+				hp--;
+				
+				
 				if(!v.isalive()){
 						die();
+						gp.updateGameUI(this);
 				}
 			}
 		}
@@ -109,13 +116,19 @@ public class GameEngine implements KeyListener, GameReporter{
 		return score;
 	}
 	
+	public long getHpScore(){
+		return hp;
+	}
+	
 	public long getScoreMax(){
 		return scoremax;
 	}
+	
+	
+	
 	@Override
 	public void keyPressed(KeyEvent e) {
 		controlVehicle(e);
-		
 	}
 
 	@Override
