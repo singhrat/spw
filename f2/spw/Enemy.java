@@ -19,7 +19,7 @@ public class Enemy extends Sprite{
 	private String img = "D:\\icon2.png" ;
 	
 	public Enemy(int x, int y) {
-		super(x, y, 15, 20);
+		super(x, y, 20, 30);
 		
 	}
 

@@ -15,12 +15,14 @@ public class GameEngine implements KeyListener, GameReporter{
 	GamePanel gp;
 	
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();	
+	private ArrayList<Enemy2> enemies2 = new ArrayList<Enemy2>();	
 	private SpaceShip v;	
 	private Timer timer;
 	
 	private long score = 0;
 	private long scoremax = 0;
 	private int hp = 3;
+	private int toom = 1;
 	private double difficulty = 0.1;
 	
 	public GameEngine(GamePanel gp, SpaceShip v) {
@@ -32,6 +34,7 @@ public class GameEngine implements KeyListener, GameReporter{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				process();
+				processEnermy2();
 			}
 		});
 		timer.setRepeats(true);
@@ -49,9 +52,17 @@ public class GameEngine implements KeyListener, GameReporter{
 		enemies.add(e);
 	}
 	
+	private void generateEnemy2(){
+		Enemy2 e2 = new Enemy2((int)(Math.random()*390), 30);
+		gp.sprites.add(e2);
+		enemies2.add(e2);
+	}
+	
+	
+	
 	private void process(){
 		
-		if(Math.random() < difficulty){
+		if(Math.random() < difficulty/2){
 			generateEnemy();
 		}
 		
@@ -67,26 +78,58 @@ public class GameEngine implements KeyListener, GameReporter{
 					scoremax=score;
 			}
 		}	
+		
 		gp.updateGameUI(this);
 		
 		Rectangle2D.Double vr = v.getRectangle();
 		Rectangle2D.Double er;
 		for(Enemy e : enemies){
 			er = e.getRectangle();
-			
 			if(er.intersects(vr)){
 				e.aliveEnemy();
 				score=0;
 				hp--;
-				
-				
-				if(!v.isalive()){
+				if(!v.live()){
 						die();
 						gp.updateGameUI(this);
 				}
 			}
 		}
 	}
+	
+	
+	
+	private void processEnermy2(){
+		if(Math.random() < difficulty/10){
+			generateEnemy2();
+		}
+		
+		Iterator<Enemy2> e_iter = enemies2.iterator();
+		while(e_iter.hasNext()){
+			Enemy2 e2 = e_iter.next();
+			e2.proceed();
+			if(!e2.isAlive()){
+				e_iter.remove();
+				gp.sprites.remove(e2);
+			}
+		}
+
+		gp.updateGameUI(this);
+		
+		Rectangle2D.Double vr = v.getRectangle();
+		Rectangle2D.Double er;
+		for(Enemy2 e2 : enemies2){
+			er = e2.getRectangle();
+			if(er.intersects(vr)){
+				e2.aliveEnemy();
+				score=0;
+				toom=0;
+				die();
+				gp.updateGameUI(this);
+			}
+		}
+	}
+	
 	
 	public void die(){
 		timer.stop();
@@ -118,6 +161,10 @@ public class GameEngine implements KeyListener, GameReporter{
 	
 	public long getHpScore(){
 		return hp;
+	}
+	
+	public long bomb(){
+		return toom;
 	}
 	
 	public long getScoreMax(){

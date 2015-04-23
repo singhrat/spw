@@ -19,6 +19,8 @@ public class GamePanel extends JPanel {
 	Graphics2D big;
 	ArrayList<Sprite> sprites = new ArrayList<Sprite>();
 	private Image bg;
+	private Image bg1;
+	private Image bg2;
 	
 
 	public GamePanel() {
@@ -26,7 +28,9 @@ public class GamePanel extends JPanel {
 		big = (Graphics2D) bi.getGraphics();
 		big.setBackground(Color.RED);
 		try{
-			bg = ImageIO.read(new File("D:\\war.jpg"));
+			bg = ImageIO.read(new File("D:\\war1.jpg"));
+			bg1 = ImageIO.read(new File("D:\\bomb.jpg"));
+			bg2 = ImageIO.read(new File("D:\\gameover1.png"));
 		} catch(IOException e){
 			e.printStackTrace();
 		}
@@ -41,8 +45,13 @@ public class GamePanel extends JPanel {
 		big.drawString(String.format("HP = %02d", reporter.getHpScore()), 5, 20);
 		
 		
-		if(reporter.getHpScore()==0)
-			big.drawString(String.format("Game Over"), 170, 300);
+		if(reporter.getHpScore()==0){
+			big.drawImage(bg2,0,0,400,600, this);
+		}
+		if(reporter.bomb()==0){
+			big.drawImage(bg1,0,0,400,600, this);
+		}
+		
 		
 		for(Sprite s : sprites){
 			s.draw(big);

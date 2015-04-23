@@ -44,7 +44,7 @@ public class SpaceShip extends Sprite{
 		if(y > 600)
 			y = 600;
 	}
-	public boolean isalive(){
+	public boolean live(){
 		i--;
 		if(i==0)
 			return false;
