@@ -4,7 +4,8 @@ public interface GameReporter {
 
 	long getScore();
 	long getScoreMax();
-	long getHpScore();
 	long bomb();
+	long getlive();
+	
 	//int Gameover();
 }

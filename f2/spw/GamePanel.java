@@ -21,6 +21,7 @@ public class GamePanel extends JPanel {
 	private Image bg;
 	private Image bg1;
 	private Image bg2;
+	private Image bg3;
 	
 
 	public GamePanel() {
@@ -28,9 +29,10 @@ public class GamePanel extends JPanel {
 		big = (Graphics2D) bi.getGraphics();
 		big.setBackground(Color.RED);
 		try{
-			bg = ImageIO.read(new File("D:\\war1.jpg"));
+			bg = ImageIO.read(new File("D:\\war2.jpg"));
 			bg1 = ImageIO.read(new File("D:\\bomb.jpg"));
 			bg2 = ImageIO.read(new File("D:\\gameover1.png"));
+			bg3 = ImageIO.read(new File("D:\\live1.png"));
 		} catch(IOException e){
 			e.printStackTrace();
 		}
@@ -42,12 +44,28 @@ public class GamePanel extends JPanel {
 		big.setColor(Color.WHITE);		
 		big.drawString(String.format("%08d", reporter.getScore()), 300, 20);
 		big.drawString(String.format("%08d", reporter.getScoreMax()), 200, 20);
-		big.drawString(String.format("HP = %02d", reporter.getHpScore()), 5, 20);
-		
-		
-		if(reporter.getHpScore()==0){
-			big.drawImage(bg2,0,0,400,600, this);
+
+		if(reporter.getScore()==0){
+			//big.drawString(String.format("Level 1"),170, 300);
+			//big.drawString(String.format("Game Over"), 170, 300);
+			//("Level 1",170, 300);
 		}
+		if(reporter.getScore()==500){
+			big.drawString(String.format("Level 2"),170, 300);
+			//big.drawString(String.format("Game Over"), 170, 300);
+			//("Level 1",170, 300);
+		}
+		
+		int x=5;
+		for(int i=0 ; i < reporter.getlive(); i++){
+			big.drawImage(bg3, x , 5, null);
+			x+=20;
+		}
+		
+	
+		if(reporter.getlive()==0)
+			big.drawImage(bg2,0,0,400,600, this);
+		
 		if(reporter.bomb()==0){
 			big.drawImage(bg1,0,0,400,600, this);
 		}

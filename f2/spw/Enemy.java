@@ -16,7 +16,7 @@ public class Enemy extends Sprite{
 	private boolean alive = true;
 	
 	private Image b1;
-	private String img = "D:\\icon2.png" ;
+	private String img = "D:\\icon7.png" ;
 	
 	public Enemy(int x, int y) {
 		super(x, y, 20, 30);

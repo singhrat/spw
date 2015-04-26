@@ -19,7 +19,7 @@ public class Enemy2 extends Sprite{
 
 	@Override
 	public void draw(Graphics2D g) {
-		Image img = Toolkit.getDefaultToolkit().getImage("D:\\icon3.png");
+		Image img = Toolkit.getDefaultToolkit().getImage("D:\\icon5.png");
       g.drawImage(img,x, y, width, height, null);
 	}
 

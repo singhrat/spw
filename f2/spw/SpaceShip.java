@@ -13,7 +13,7 @@ public class SpaceShip extends Sprite{
 	private Image b1;
 	private String img = "D:\\icon1.gif" ;
 	boolean live =true;
-	int i=3;
+	int i=5;
 	
 	public SpaceShip(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -49,7 +49,6 @@ public class SpaceShip extends Sprite{
 		if(i==0)
 			return false;
 		else
-			return true;
-		
+			return true;	
 	}
 }

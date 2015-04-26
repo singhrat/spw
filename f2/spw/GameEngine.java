@@ -21,9 +21,10 @@ public class GameEngine implements KeyListener, GameReporter{
 	
 	private long score = 0;
 	private long scoremax = 0;
-	private int hp = 3;
 	private int toom = 1;
 	private double difficulty = 0.1;
+	public int i;
+	private int live = 5;
 	
 	public GameEngine(GamePanel gp, SpaceShip v) {
 		this.gp = gp;
@@ -62,11 +63,13 @@ public class GameEngine implements KeyListener, GameReporter{
 	
 	private void process(){
 		
-		if(Math.random() < difficulty/2){
+		if(Math.random() < difficulty/5&&score<500){
 			generateEnemy();
 		}
-		
-		Iterator<Enemy> e_iter = enemies.iterator();
+		if(Math.random() < difficulty&& score>=500){
+			generateEnemy();
+		}
+		Iterator<Enemy> e_iter = enemies.iterator() ;
 		while(e_iter.hasNext()){
 			Enemy e = e_iter.next();
 			e.proceed();
@@ -88,7 +91,8 @@ public class GameEngine implements KeyListener, GameReporter{
 			if(er.intersects(vr)){
 				e.aliveEnemy();
 				score=0;
-				hp--;
+				live--;
+
 				if(!v.live()){
 						die();
 						gp.updateGameUI(this);
@@ -159,8 +163,10 @@ public class GameEngine implements KeyListener, GameReporter{
 		return score;
 	}
 	
-	public long getHpScore(){
-		return hp;
+	
+	
+	public long getlive(){
+		return live;
 	}
 	
 	public long bomb(){
@@ -170,6 +176,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	public long getScoreMax(){
 		return scoremax;
 	}
+	
 	
 	
 	
