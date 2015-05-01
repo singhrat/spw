@@ -16,6 +16,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();	
 	private ArrayList<Enemy2> enemies2 = new ArrayList<Enemy2>();	
+	private ArrayList<Life> enemies3 = new ArrayList<Life>();	
 	private SpaceShip v;	
 	private Timer timer;
 	
@@ -36,6 +37,7 @@ public class GameEngine implements KeyListener, GameReporter{
 			public void actionPerformed(ActionEvent arg0) {
 				process();
 				processEnermy2();
+				processLife();
 			}
 		});
 		timer.setRepeats(true);
@@ -57,6 +59,11 @@ public class GameEngine implements KeyListener, GameReporter{
 		Enemy2 e2 = new Enemy2((int)(Math.random()*390), 30);
 		gp.sprites.add(e2);
 		enemies2.add(e2);
+	}
+	private void life(){
+		Life e3 = new Life((int)(Math.random()*390), 30);
+		gp.sprites.add(e3);
+		enemies3.add(e3);
 	}
 	
 	
@@ -104,7 +111,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	
 	
 	private void processEnermy2(){
-		if(Math.random() < difficulty/10){
+	if(Math.random() < difficulty/10){
 			generateEnemy2();
 		}
 		
@@ -134,13 +141,56 @@ public class GameEngine implements KeyListener, GameReporter{
 		}
 	}
 	
+		private void processLife(){
+		if(Math.random() < difficulty/10){
+			life();
+		}
+		Iterator<Life> e_iter = enemies3.iterator();
+		while(e_iter.hasNext()){
+			Life e3 = e_iter.next();
+			e3.proceed();
+			if(!e3.isAlive()){
+				e_iter.remove();
+				gp.sprites.remove(e3);
+			}
+		}
+
+		gp.updateGameUI(this);
+		
+		Rectangle2D.Double vr = v.getRectangle();
+		Rectangle2D.Double er;
+		for(Life e3 : enemies3){
+			er = e3.getRectangle();
+			if(er.intersects(vr)){
+				e3.aliveEnemy();
+				//score=0;
+				//toom=0;
+				//die();
+				gp.updateGameUI(this);
+			}
+		}
+	}
+	
 	
 	public void die(){
 		timer.stop();
 	}
 	
 	void controlVehicle(KeyEvent e) {
-		switch (e.getKeyCode()) {
+		switch (e.getKeyCode()) 
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		{
 		case KeyEvent.VK_LEFT:
 			v.moveX(-1);
 			break;
