@@ -13,14 +13,15 @@ import javax.imageio.ImageIO;
 
 import javax.swing.JPanel;
 
+import java.awt.Font;
+
 public class GamePanel extends JPanel {
 	
 	private BufferedImage bi;	
 	Graphics2D big;
 	ArrayList<Sprite> sprites = new ArrayList<Sprite>();
 	private Image bg;
-	private Image bg1;
-	private Image bg2;
+	private Image bg1;;
 	private Image bg3;
 	
 
@@ -31,7 +32,6 @@ public class GamePanel extends JPanel {
 		try{
 			bg = ImageIO.read(new File("D:\\war2.jpg"));
 			bg1 = ImageIO.read(new File("D:\\bomb.jpg"));
-			bg2 = ImageIO.read(new File("D:\\gameover1.png"));
 			bg3 = ImageIO.read(new File("D:\\live1.png"));
 		} catch(IOException e){
 			e.printStackTrace();
@@ -41,18 +41,22 @@ public class GamePanel extends JPanel {
 	public void updateGameUI(GameReporter reporter){
 		//big.clearRect(0, 0, 400, 600);
 		big.drawImage(bg,0,0,400,600, this);
-		big.setColor(Color.WHITE);		
+		big.setColor(Color.WHITE);
+		Font f2 = new Font("",Font.PLAIN,12);
+		big.setFont(f2);
 		big.drawString(String.format("%08d", reporter.getScore()), 300, 20);
 		big.drawString(String.format("%08d", reporter.getScoreMax()), 200, 20);
-
-		if(reporter.getScore()==0){
-			//big.drawString(String.format("Level 1"),170, 300);
+		if(reporter.getScore()>=0&&reporter.getScore()<=500){
+			big.drawString(String.format("Level 1"),5, 40);
 			//big.drawString(String.format("Game Over"), 170, 300);
 			//("Level 1",170, 300);
 		}
-		if(reporter.getScore()==500){
-			big.drawString(String.format("Level 2"),170, 300);
-			//big.drawString(String.format("Game Over"), 170, 300);
+		if(reporter.getScore()>500&&reporter.getScore()<=1000){
+			big.drawString(String.format("Level 2"),5, 40);
+			//("Level 1",170, 300);
+		}
+		if(reporter.getScore()>1000&&reporter.getScore()<=1500){
+			big.drawString(String.format("Level 3"),5, 40);
 			//("Level 1",170, 300);
 		}
 		
@@ -61,16 +65,12 @@ public class GamePanel extends JPanel {
 			big.drawImage(bg3, x , 5, null);
 			x+=20;
 		}
-		
-	
-		if(reporter.getlive()==0)
-			big.drawImage(bg2,0,0,400,600, this);
-		
-		if(reporter.bomb()==0){
-			big.drawImage(bg1,0,0,400,600, this);
+		if(reporter.getlive()==0){
+			Font f = new Font("",Font.BOLD,20);
+			big.setFont(f);
+			big.setColor(Color.BLACK);
+			big.drawString(String.format("Game Over"), 150, 300);
 		}
-		
-		
 		for(Sprite s : sprites){
 			s.draw(big);
 		}

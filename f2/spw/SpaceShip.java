@@ -27,7 +27,6 @@ public class SpaceShip extends Sprite{
 			e.printStackTrace();
 		}
 		g.drawImage(b1, x, y, width, height, null);
-		
 	}
 
 	public void moveX(int direction){
@@ -44,11 +43,5 @@ public class SpaceShip extends Sprite{
 		if(y > 600)
 			y = 600;
 	}
-	public boolean live(){
-		i--;
-		if(i==0)
-			return false;
-		else
-			return true;	
-	}
+
 }

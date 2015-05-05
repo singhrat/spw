@@ -13,7 +13,6 @@ import javax.swing.Timer;
 
 public class GameEngine implements KeyListener, GameReporter{
 	GamePanel gp;
-	
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();	
 	private ArrayList<Enemy2> enemies2 = new ArrayList<Enemy2>();	
 	private ArrayList<Life> enemies3 = new ArrayList<Life>();	
@@ -22,17 +21,17 @@ public class GameEngine implements KeyListener, GameReporter{
 	
 	private long score = 0;
 	private long scoremax = 0;
-	private int toom = 1;
 	private double difficulty = 0.1;
 	public int i;
-	private int live = 5;
+	private int lifes = 5;
+	private boolean check = true;
+	
 	
 	public GameEngine(GamePanel gp, SpaceShip v) {
 		this.gp = gp;
 		this.v = v;		
-		
 		gp.sprites.add(v);
-			timer = new Timer(100, new ActionListener() {
+			timer = new Timer(70, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				process();
@@ -41,7 +40,6 @@ public class GameEngine implements KeyListener, GameReporter{
 			}
 		});
 		timer.setRepeats(true);
-		
 	}
 	
 	
@@ -70,10 +68,13 @@ public class GameEngine implements KeyListener, GameReporter{
 	
 	private void process(){
 		
-		if(Math.random() < difficulty/5&&score<500){
+		if(Math.random() < difficulty/5&&score<=500){
 			generateEnemy();
 		}
-		if(Math.random() < difficulty&& score>=500){
+		if(Math.random() < difficulty/3&& score>500&& score<=1000){
+			generateEnemy();
+		}
+		if(Math.random() < difficulty/2&& score>1000&& score<=1500){
 			generateEnemy();
 		}
 		Iterator<Enemy> e_iter = enemies.iterator() ;
@@ -83,7 +84,7 @@ public class GameEngine implements KeyListener, GameReporter{
 			if(!e.isAlive()){
 				e_iter.remove();
 				gp.sprites.remove(e);
-				score += 100;
+				score = score + 100;
 				if(score>=scoremax)
 					scoremax=score;
 			}
@@ -96,12 +97,12 @@ public class GameEngine implements KeyListener, GameReporter{
 		for(Enemy e : enemies){
 			er = e.getRectangle();
 			if(er.intersects(vr)){
-				e.aliveEnemy();
-				score=0;
-				live--;
 
-				if(!v.live()){
+				e.aliveEnemy();
+				lifes--;
+				if(lifes == 0){
 						die();
+						score=0;
 						gp.updateGameUI(this);
 				}
 			}
@@ -133,15 +134,15 @@ public class GameEngine implements KeyListener, GameReporter{
 			er = e2.getRectangle();
 			if(er.intersects(vr)){
 				e2.aliveEnemy();
-				score=0;
-				toom=0;
 				die();
+				score=0;
+				lifes=0;
 				gp.updateGameUI(this);
 			}
 		}
 	}
 	
-		private void processLife(){
+	private void processLife(){
 		if(Math.random() < difficulty/10){
 			life();
 		}
@@ -154,18 +155,15 @@ public class GameEngine implements KeyListener, GameReporter{
 				gp.sprites.remove(e3);
 			}
 		}
-
 		gp.updateGameUI(this);
-		
 		Rectangle2D.Double vr = v.getRectangle();
 		Rectangle2D.Double er;
 		for(Life e3 : enemies3){
 			er = e3.getRectangle();
 			if(er.intersects(vr)){
 				e3.aliveEnemy();
-				//score=0;
-				//toom=0;
-				//die();
+				if(lifes<5)
+					lifes++;
 				gp.updateGameUI(this);
 			}
 		}
@@ -174,38 +172,52 @@ public class GameEngine implements KeyListener, GameReporter{
 	
 	public void die(){
 		timer.stop();
+		check = false;
 	}
 	
+	public void restart(){
+		for(Enemy e : enemies){
+			gp.sprites.remove(e);
+			e.aliveEnemy();
+		}
+		for(Enemy2 e2 : enemies2){
+			gp.sprites.remove(e2);
+			e2.aliveEnemy();
+		}
+		for(Life e3 : enemies3){
+			gp.sprites.remove(e3);
+			e3.aliveEnemy();
+		}
+		check = true;
+		lifes = 5;
+		v.x = 180;
+		v.y = 550;
+		gp.sprites.add(v);
+		start();
+		gp.updateGameUI(this);
+		score=0;
+	}	
+	
 	void controlVehicle(KeyEvent e) {
-		switch (e.getKeyCode()) 
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		{
+		switch (e.getKeyCode()) {
 		case KeyEvent.VK_LEFT:
-			v.moveX(-1);
-			break;
+				v.moveX(-1);
+				break;
 		case KeyEvent.VK_RIGHT:
-			v.moveX(1);
-			break;
+				v.moveX(1);
+				break;
 		case KeyEvent.VK_UP:
                 v.moveY(-1);
                 break;
          case KeyEvent.VK_DOWN:
                 v.moveY(1);
                 break;
+		case KeyEvent.VK_R:
+				restart();
+				break;
 		case KeyEvent.VK_D:
-			difficulty += 0.1;
-			break;
+				difficulty += 0.1;
+				break;
 		}
 	}
 
@@ -213,22 +225,13 @@ public class GameEngine implements KeyListener, GameReporter{
 		return score;
 	}
 	
-	
-	
 	public long getlive(){
-		return live;
+		return lifes;
 	}
-	
-	public long bomb(){
-		return toom;
-	}
-	
+
 	public long getScoreMax(){
 		return scoremax;
 	}
-	
-	
-	
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
